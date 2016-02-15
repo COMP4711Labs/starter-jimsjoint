@@ -88,6 +88,18 @@ class Order extends Application {
         $this->data['pagebody'] = 'show_order';
         $this->data['order_num'] = $order_num;
         //FIXME
+        $this->data['total'] = number_format($this->orders->total($order_num), 2);
+        
+        $this->load->model('Orderitems');
+        $items = $this->Orderitems->group($order_num);
+        $this->load->model('Menu');
+        foreach($items as $item){
+            $menuitem = $this->Menu->get($item->item);
+            $item->code = $menuitem->name;
+        }
+        $this->data['items'] = $items;
+        
+        $this->data['okornot'] = $this->orders->validate($order_num) ? "" : "disabled";
 
         $this->render();
     }
@@ -95,6 +107,13 @@ class Order extends Application {
     // proceed with checkout
     function proceed($order_num) {
         //FIXME
+//        if(!$this->orders->validate($order_num))
+//            redirect('/order/display_menu/' . $order_num);
+//        $record = $this->orders->get($order_num);
+//        $record->date = date(DATE_ATOM);
+//        $record->status = 'c';
+//        $record->total = $this->orders->total($order_num);
+//        $this->orders->update($record);
         redirect('/');
     }
 
