@@ -14,6 +14,7 @@ class Order extends Application {
     function __construct() {
         parent::__construct();
         $this->load->model('orders');
+        $this->load->model('menu');
     }
 
     // start a new order
@@ -71,13 +72,13 @@ class Order extends Application {
     // make a menu ordering column
     function make_column($category) {
         //FIXME
-        $this->load->model('Menu');
-        return $this->Menu->some('category', $category);
+        
+        return $this->menu->some('category', $category);
     }
 
     // add an item to an order
     function add($order_num, $item) {
-        //FIXME
+        $this->orders->add_item($order_num, $item);
         redirect('/order/display_menu/' . $order_num);
     }
 
